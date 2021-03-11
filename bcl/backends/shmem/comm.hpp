@@ -110,16 +110,10 @@ inline T broadcast(const T &val, uint64_t root) {
   }
 }
 
-template <typename T, typename BinaryOp>
-inline T allreduce(const T &val, BinaryOp op) {
-  T rv = val;
-  for (size_t rank = 0; rank < BCL::nprocs(); rank++) {
-    T current = broadcast(val, rank);
-    if (rank != BCL::rank()) {
-      rv = op(rv, current);
-    }
-  }
-  return rv;
+template <typename T>
+inline auto arbroadcast(T* val, uint64_t root, size_t size, const BCL::Team& team) {
+  throw std::runtime_error("arbroadcast not implemented in SHMEM");
+  return BCL::request();
 }
 
 inline int allreduce(const int &val, std::plus <int> op) {
