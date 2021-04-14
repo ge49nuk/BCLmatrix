@@ -19,6 +19,13 @@
 #include <bcl/core/teams.hpp>
 #include <bcl/core/util.hpp>
 
+struct task
+{
+    int matrixSize;
+    double *matrix;
+    double *matrix2;
+};
+
 namespace BCL {
   // TODO: put these in a compilation unit.
   uint64_t shared_segment_size;

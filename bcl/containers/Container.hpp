@@ -4,8 +4,10 @@
 #include <type_traits>
 #include <memory>
 #include <stdexcept>
+#include <math.h>
 
 #include <bcl/bcl.hpp>
+int alloced = 0;
 
 namespace BCL {
   template <typename T, size_t N>
@@ -95,11 +97,54 @@ namespace BCL {
     }
   };
 
+  template <>
+  struct serialize <task> {
+    serial_ptr <double> operator()(const task &task) const noexcept {
+      serial_ptr <double> ptr;
+      ptr.N = task.matrixSize*task.matrixSize*2;
+      ptr.ptr = std::shared_ptr <double> (new double[ptr.N]);
+      for (int i = 0; i < ptr.N/2; i++) {
+        ptr.ptr.get()[i] = task.matrix[i];
+      }
+      for(int i = ptr.N/2; i< ptr.N; i++){
+        ptr.ptr.get()[i] = task.matrix2[i-ptr.N/2];
+      }
+      // printf("[%ld]Freed %d\n", BCL::rank(), task.matrixSize*task.matrixSize*2);
+      free(task.matrix);
+      free(task.matrix2);
+      
+      alloced-=2;
+      // if(BCL::rank()==0)
+      //   printf("[%ld](s)Alloced container: %d\n", BCL::rank(),alloced);
+      
+      return ptr;
+    }
+    task deserialize(const serial_ptr <double> &ptr) const noexcept {
+      task t;
+      t.matrixSize = sqrt(ptr.N/2);
+      t.matrix = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
+      t.matrix2 = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
+      // printf("[%ld]Alloced %d\n", BCL::rank(), t.matrixSize*t.matrixSize*2);
+      
+      for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
+        t.matrix[i] = ptr.ptr.get()[i];
+        // printf("Matrix[%d]: %lf\n",i,t.matrix[i]);
+      }
+      for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
+        t.matrix2[i] = ptr.ptr.get()[i+t.matrixSize*t.matrixSize];
+      }
+      alloced+=2;
+      // if(BCL::rank()==0)
+      //   printf("[%ld](des)Alloced container: %d\n", BCL::rank(),alloced);
+      return t;
+    }
+  };
+
   // TODO: this is not really what we want; would be prefer
   //       std::is_trivially_copyable<T>, but missing from
   //       icc.
   template <typename T>
-  struct serialize <T, 0, BCL::enable_if_t<std::is_trivially_copyable<T>::value>> :
+  struct serialize <T, 0, BCL::enable_if_t<std::is_trivial<T>::value>> :
     public identity_serialize<T>{};
 
   template <typename T>
@@ -121,6 +166,8 @@ namespace BCL {
       return std::string(blob.val, blob.len);
     }
   };
+
+
 
   template <typename T, typename Serialize, typename Enabler = void>
   class Container {

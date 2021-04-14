@@ -17,20 +17,22 @@ ifeq ($(BACKEND),SHMEM)
 else ifeq ($(BACKEND),GASNET_EX)
   BACKEND=GASNET_EX
   # XXX: Allow selection of conduit.
-  include $(gasnet_prefix)/include/mpi-conduit/mpi-par.mak
+  include /dss/dsshome1/lxc0B/ge49nuk2/spack/opt/linux-sles15-haswell/gasnet/2019.3.0-gcc-8.4.0-j75dwrr/include/mpi-conduit/mpi-par.mak
 
   BCLFLAGS = $(GASNET_CXXCPPFLAGS) $(GASNET_CXXFLAGS) $(GASNET_LDFLAGS) $(GASNET_LIBS) -DGASNET_EX -I$(BCLROOT)
-  CXX = mpic++
+  CXX = mpicxx -cxx=g++
 
+  BCL_RUN=mpirun -n 4
+else ifeq ($(BACKEND), UPCXX)
+  BACKEND=UPCXX
+  CXX = /dss/dssfs02/lwp-dss-0001/pr63so/pr63so-dss-0000/ge49nuk2/upc/bin/upcxx -O3
   BCL_RUN=mpirun -n 4
 else
+  BCL_RUN=mpirun -n 4
   BACKEND=MPI
   BCLFLAGS = -I$(BCLROOT)
-  CXX=mpic++
-
-  BCL_RUN=mpirun -n 4
+  CXX=mpicxx -cxx=g++
 endif
-
 CXXFLAGS = -std=gnu++17 $(BCLFLAGS)
 
 SOURCES += $(wildcard *.cpp)
