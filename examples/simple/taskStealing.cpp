@@ -8,8 +8,7 @@
 #include <random>
 
 double fTimeStart, fTimeEnd;
-bool taskStealing = false;
-int freed = 0;
+bool taskStealing = true;
 
 void multiply(double *matrix, double *matrix2, double *result, int matrixSize);
 void initialize_matrix_rnd(double *mat, int matrixSize);
@@ -46,58 +45,50 @@ int main(int argc, char **argv)
         queues.push_back(BCL::CircularQueue<task>(rank, 100000));
     }
 
+    //create tasks
+    for (int i = 0; i < tasks; i++)
+    {
+        struct task t;
+        t.matrix = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
+        t.matrix2 = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
+        t.matrixSize = matrixSize;
+        initialize_matrix_rnd(t.matrix, matrixSize);
+        initialize_matrix_rnd(t.matrix2, matrixSize);
+        queues[BCL::rank()].push(t, BCL::CircularQueueAL::push);
+    }
+
+    BCL::barrier();
+    // for (int i = 0; i < BCL::nprocs(); i++)
+    //    printf("[%ld]Rank %d:%ld\n", BCL::rank(), i, queues[i].size());
+
+    //solve tasks
     if (BCL::rank() == 0)
         fTimeStart = curtime();
-
-    //create tasks
-    for (int it = 0; it < 5; it++)
+    while (true)
     {
-        for (int i = 0; i < tasks; i++)
+        //steal tasks if activated
+        if (queues[BCL::rank()].empty())
         {
-            struct task t;
-            t.matrix = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
-            t.matrix2 = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
-            t.matrixSize = matrixSize;
-            initialize_matrix_rnd(t.matrix, matrixSize);
-            initialize_matrix_rnd(t.matrix2, matrixSize);
-            queues[BCL::rank()].push(t, BCL::CircularQueueAL::push);
-        }
-
-
-        BCL::barrier();
-        // for (int i = 0; i < BCL::nprocs(); i++)
-        //    printf("[%ld]Rank %d:%ld\n", BCL::rank(), i, queues[i].size());
-
-        //solve tasks
-        while (true)
-        {
-            //steal tasks if activated
-            if (queues[BCL::rank()].empty())
+            if (!taskStealing)
+                break;
+            if (!steal(&queues))
             {
-                if (!taskStealing)
-                    break;
-                if (!steal(&queues))
-                {
-                    break;
-                }
-            }
-
-            task t;
-            bool success = queues[BCL::rank()].pop(t);
-            if (success)
-            {
-                double *result = new double[matrixSize * matrixSize];
-                multiply(t.matrix, t.matrix2, result, matrixSize);
-                free(t.matrix);
-                free(t.matrix2);
-                delete[] result;
-                // freed += 2;
-                // if(BCL::rank()==0)
-                //     printf("[%ld]Freed matrix: %d\n", BCL::rank(),freed);
+                break;
             }
         }
-        BCL::barrier();
+
+        task t;
+        bool success = queues[BCL::rank()].pop(t);
+        if (success)
+        {
+            double *result = new double[matrixSize * matrixSize];
+            multiply(t.matrix, t.matrix2, result, matrixSize);
+            free(t.matrix);
+            free(t.matrix2);
+            delete[] result;
+        }
     }
+    BCL::barrier();
 
     if (BCL::rank() == 0)
     {
@@ -154,22 +145,23 @@ bool steal(std::vector<BCL::CircularQueue<task>> *queues)
     for (std::vector<int>::iterator it = ranks.begin(); it != ranks.end(); ++it)
     {
         // printf("[%ld]Current: %d\n", BCL::rank(), *it);
-        if ((*queues)[*it].size() > 1)
+        long size = (*queues)[*it].size();
+        if (size > 1)
         {
             //printf("[%ld]found %d!\n", BCL::rank(),i);
             task t;
             //steals half the tasks
-            for (int j = 0; j < (*queues)[*it].size() / 2; j++)
+            for (int j = 0; j < size / 2; j++)
             {
 
                 (*queues)[*it].pop(t, BCL::CircularQueueAL::pop);
                 //printf("[%ld]stealing task %d\n", BCL::rank(), j);
                 (*queues)[BCL::rank()].push(t);
             }
-
-            if (!(*queues)[BCL::rank()].empty())
+            long ownSize = !(*queues)[BCL::rank()].size();
+            if (ownSize>0)
             {
-                printf("[%ld]Successfully stolen %ld tasks!\n", BCL::rank(), (*queues)[BCL::rank()].size());
+                printf("[%ld]Successfully stolen %ld/%ld tasks!\n", BCL::rank(), (*queues)[BCL::rank()].size(), size);
                 return true;
             }
         }
