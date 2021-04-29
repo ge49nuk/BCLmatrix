@@ -33,7 +33,7 @@ else
   BCLFLAGS = -I$(BCLROOT)
   CXX=mpicxx -cxx=g++
 endif
-CXXFLAGS = -std=gnu++17 $(BCLFLAGS)
+CXXFLAGS = -fopenmp -std=gnu++17 $(BCLFLAGS)
 
 SOURCES += $(wildcard *.cpp)
 TARGETS := $(patsubst %.cpp, %, $(SOURCES))

@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include <time.h>
+#include <omp.h>
 
 #include <random>
 
@@ -12,7 +13,7 @@ bool taskStealing = true;
 
 void multiply(double *matrix, double *matrix2, double *result, int matrixSize);
 void initialize_matrix_rnd(double *mat, int matrixSize);
-bool steal(std::vector<BCL::CircularQueue<task>> *queues);
+bool steal(std::vector<BCL::CircularQueue<task>> *queues, bool intraNode);
 
 static inline double curtime(void)
 {
@@ -42,7 +43,10 @@ int main(int argc, char **argv)
     std::vector<BCL::CircularQueue<task>> queues;
     for (size_t rank = 0; rank < BCL::nprocs(); rank++)
     {
-        queues.push_back(BCL::CircularQueue<task>(rank, 100000));
+        for (size_t thread = 0; thread < omp_get_max_threads(); thread++)
+        {
+            queues.push_back(BCL::CircularQueue<task>(rank, 60000 / omp_get_num_threads()));
+        }
     }
 
     //create tasks
@@ -51,12 +55,12 @@ int main(int argc, char **argv)
         struct task t;
         t.matrix = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
         t.matrix2 = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
+        t.result = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
         t.matrixSize = matrixSize;
         initialize_matrix_rnd(t.matrix, matrixSize);
         initialize_matrix_rnd(t.matrix2, matrixSize);
-        queues[BCL::rank()].push(t, BCL::CircularQueueAL::push);
+        queues[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].push(t, BCL::CircularQueueAL::push);
     }
-
     BCL::barrier();
     // for (int i = 0; i < BCL::nprocs(); i++)
     //    printf("[%ld]Rank %d:%ld\n", BCL::rank(), i, queues[i].size());
@@ -64,28 +68,31 @@ int main(int argc, char **argv)
     //solve tasks
     if (BCL::rank() == 0)
         fTimeStart = curtime();
-    while (true)
-    {
-        //steal tasks if activated
-        if (queues[BCL::rank()].empty())
-        {
-            if (!taskStealing)
-                break;
-            if (!steal(&queues))
-            {
-                break;
-            }
-        }
 
-        task t;
-        bool success = queues[BCL::rank()].pop(t);
-        if (success)
+#pragma omp parallel
+    {
+        while (true)
         {
-            double *result = new double[matrixSize * matrixSize];
-            multiply(t.matrix, t.matrix2, result, matrixSize);
-            free(t.matrix);
-            free(t.matrix2);
-            delete[] result;
+            //steal tasks if activated
+            if (queues[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].empty())
+            {
+                if (!taskStealing)
+                    break;
+                if (!steal(&queues, true))
+                {
+                    break;
+                }
+            }
+
+            task t;
+            bool success = queues[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].pop(t);
+            if (success)
+            {
+                multiply(t.matrix, t.matrix2, t.result, matrixSize);
+                free(t.matrix);
+                free(t.matrix2);
+                free(t.result);
+            }
         }
     }
     BCL::barrier();
@@ -128,14 +135,28 @@ void multiply(double *matrix, double *matrix2, double *result, int matrixSize)
     }
 }
 
-bool steal(std::vector<BCL::CircularQueue<task>> *queues)
+bool steal(std::vector<BCL::CircularQueue<task>> *queues, bool intraNode)
 {
     std::srand(unsigned(std::time(0)));
     std::vector<int> ranks;
-    for (int i = 0; i < BCL::nprocs(); ++i)
+
+    // get queue positions of a threads inside of own rank
+    if (intraNode)
     {
-        if (i != BCL::rank())
-            ranks.push_back(i);
+        for (int i = BCL::rank()*omp_get_num_threads(); i < (BCL::rank()+1)*omp_get_num_threads(); i++)
+        {
+            if (i != BCL::rank() * omp_get_num_threads() + omp_get_thread_num())
+                ranks.push_back(i);
+        }
+    }
+    //  "" outside of own rank
+    else
+    {
+        for (int i = 0; i < BCL::nprocs() * omp_get_num_threads(); i++)
+        {
+            if (i < BCL::rank() * omp_get_num_threads() || i>(BCL::rank()+1)*omp_get_num_threads())
+                ranks.push_back(i);
+        }
     }
 
     std::random_shuffle(ranks.begin(), ranks.end());
@@ -151,20 +172,22 @@ bool steal(std::vector<BCL::CircularQueue<task>> *queues)
             //printf("[%ld]found %d!\n", BCL::rank(),i);
             task t;
             //steals half the tasks
-            for (int j = 0; j < size / 2; j++)
+            for (int j = 0; j < (*queues)[*it].size() / 2; j++)
             {
-
-                (*queues)[*it].pop(t, BCL::CircularQueueAL::pop);
+                (*queues)[*it].pop(t);
                 //printf("[%ld]stealing task %d\n", BCL::rank(), j);
-                (*queues)[BCL::rank()].push(t);
+                (*queues)[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].push(t);
             }
-            long ownSize = !(*queues)[BCL::rank()].size();
-            if (ownSize>0)
+            long ownSize = (*queues)[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].size();
+            if (ownSize > 0)
             {
-                printf("[%ld]Successfully stolen %ld/%ld tasks!\n", BCL::rank(), (*queues)[BCL::rank()].size(), size);
+                printf("[%ld]Successfully stolen %ld/%ld tasks!\n", BCL::rank(), (*queues)[BCL::rank() * omp_get_num_threads() + omp_get_thread_num()].size(), size);
                 return true;
             }
         }
     }
+
+    if(intraNode)
+        return steal(queues, false);
     return false;
 }

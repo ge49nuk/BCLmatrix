@@ -7,7 +7,7 @@
 
 #include <random>
 
-double fTimeStart, fTimeEnd;
+double fTimeStart, fTimeEnd, startTot, endTot;
 bool taskStealing = true;
 int stolen = 0;
 int freed = 0;
@@ -55,6 +55,7 @@ int main(int argc, char **argv)
             struct task t;
             t.matrix = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
             t.matrix2 = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
+            t.result = (double *)malloc(sizeof(double) * matrixSize * matrixSize);
             t.matrixSize = matrixSize;
             initialize_matrix_rnd(t.matrix, matrixSize);
             initialize_matrix_rnd(t.matrix2, matrixSize);
@@ -62,7 +63,7 @@ int main(int argc, char **argv)
         }
 
         BCL::barrier();
-
+        startTot = curtime();
         //steal tasks
         if (queues[BCL::rank()].empty())
         {
@@ -73,6 +74,10 @@ int main(int argc, char **argv)
                 double elapsed = fTimeEnd - fTimeStart;
                 printf("Stolen %d tasks with a rate of %lf MB/s\n", stolen, (matrixSize * matrixSize * 8 * 2 * stolen) / (elapsed * 1000000));
             }
+        }
+        endTot = curtime();
+        if(BCL::rank()==1){
+            printf("Total runtime: %lf\n", endTot-startTot);
         }
 
         BCL::barrier();
