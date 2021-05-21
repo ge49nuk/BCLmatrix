@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <math.h>
+#include <omp.h>
 
 #include <bcl/bcl.hpp>
 int alloced = 0;
@@ -100,20 +101,32 @@ namespace BCL {
   template <>
   struct serialize <task> {
     serial_ptr <double> operator()(const task &task) const noexcept {
+      
       serial_ptr <double> ptr;
-      ptr.N = task.matrixSize*task.matrixSize*2;
+      ptr.N = task.matrixSize*task.matrixSize*3 + 1;
       ptr.ptr = std::shared_ptr <double> (new double[ptr.N]);
-      for (int i = 0; i < ptr.N/2; i++) {
-        ptr.ptr.get()[i] = task.matrix[i];
-      }
-      for(int i = ptr.N/2; i< ptr.N; i++){
-        ptr.ptr.get()[i] = task.matrix2[i-ptr.N/2];
+
+      unsigned long tmp = task.matrixSize;
+      tmp <<= 32;
+      tmp += task.taskId;
+      ptr.ptr.get()[ptr.N-1] = tmp;
+
+
+      for (int i = 0; i < ptr.N-1; i++) {
+
+        if(i >= (ptr.N-1)*2/3){
+          ptr.ptr.get()[i] = task.result[i-(ptr.N-1)*2/3];
+        }
+        else if(i >= (ptr.N-1)/3){
+          ptr.ptr.get()[i] = task.matrix2[i-(ptr.N-1)/3];
+        }
+        else{
+          ptr.ptr.get()[i] = task.matrix[i];
+        }
       }
       // printf("[%ld]Freed %d\n", BCL::rank(), task.matrixSize*task.matrixSize*2);
-      free(task.matrix);
-      free(task.matrix2);
       
-      alloced-=2;
+      // alloced-=2;
       // if(BCL::rank()==0)
       //   printf("[%ld](s)Alloced container: %d\n", BCL::rank(),alloced);
       
@@ -121,21 +134,28 @@ namespace BCL {
     }
     task deserialize(const serial_ptr <double> &ptr) const noexcept {
       task t;
-      t.matrixSize = sqrt(ptr.N/2);
-      t.matrix = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
-      t.matrix2 = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
+      double* matrices = ptr.ptr.get();
+      long size = matrices[ptr.N-1];
+      size >>= 32;
+      t.matrixSize = size;
+      t.taskId = (unsigned long)matrices[ptr.N-1] % (size << 32);
       // printf("[%ld]Alloced %d\n", BCL::rank(), t.matrixSize*t.matrixSize*2);
       
       for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
-        t.matrix[i] = ptr.ptr.get()[i];
+        t.matrix[i] = matrices[i];
         // printf("Matrix[%d]: %lf\n",i,t.matrix[i]);
       }
       for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
-        t.matrix2[i] = ptr.ptr.get()[i+t.matrixSize*t.matrixSize];
+        t.matrix2[i] = matrices[i+t.matrixSize*t.matrixSize];
       }
-      alloced+=2;
+      for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
+        t.result[i] = matrices[i+2*t.matrixSize*t.matrixSize];
+      }
+      // alloced+=2;
+      
       // if(BCL::rank()==0)
       //   printf("[%ld](des)Alloced container: %d\n", BCL::rank(),alloced);
+
       return t;
     }
   };
@@ -265,6 +285,54 @@ namespace BCL {
     void get() const {}
     void set() {}
   };
+
+  // template <>
+  // struct serialize <task> {
+  //   serial_ptr  <Container<double, serialize<double>>> operator()(const task &task) const noexcept {
+  //     serial_ptr <Container<double, serialize<double>>> ptr;
+  //     ptr.N = task.matrixSize*task.matrixSize*2 + 1;
+  //     ptr.ptr = std::shared_ptr <Container<double, serialize<double>>> (new Container<double, serialize<double>>[ptr.N]);
+
+  //     ptr.ptr.get()[ptr.N-1] = Container<double, serialize<double>> (task.matrixSize);
+
+  //     for (int i = 0; i < ptr.N/2; i++) {
+  //       ptr.ptr.get()[i] = Container<double, serialize<double>> (task.matrix[i]);
+  //     }
+  //     for(int i = ptr.N/2; i< ptr.N-1; i++){
+  //       ptr.ptr.get()[i] = Container<double, serialize<double>> (task.matrix2[i-ptr.N/2]);
+  //     }
+  //     // printf("[%ld]Freed %d\n", BCL::rank(), task.matrixSize*task.matrixSize*2);
+  //     free(task.matrix);
+  //     free(task.matrix2);
+      
+  //     alloced-=2;
+  //     // if(BCL::rank()==0)
+  //     //   printf("[%ld](s)Alloced container: %d\n", BCL::rank(),alloced);
+      
+  //     return ptr;
+  //   }
+  //   task deserialize(const serial_ptr <Container<double, serialize<double>>> &ptr) const noexcept {
+
+  //     task t;
+  //     t.matrixSize = ptr.ptr.get()[ptr.N-1].get();
+  //     t.matrix = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
+  //     t.matrix2 = (double*)malloc(sizeof(double) * t.matrixSize * t.matrixSize);
+  //     // printf("[%ld]Alloced %d\n", BCL::rank(), t.matrixSize*t.matrixSize*2);
+      
+  //     for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
+  //       t.matrix[i] = ptr.ptr.get()[i].get();
+  //       // printf("Matrix[%d]: %lf\n",i,t.matrix[i]);
+  //     }
+  //     for(int i = 0; i<t.matrixSize*t.matrixSize; i++){
+  //       t.matrix2[i] = ptr.ptr.get()[i+t.matrixSize*t.matrixSize].get();
+  //     }
+  //     alloced+=2;
+      
+  //     // if(BCL::rank()==0)
+  //     //   printf("[%ld](des)Alloced container: %d\n", BCL::rank(),alloced);
+  //     return t;
+  //   }
+  // };
 
   template <typename T>
   struct serialize <std::vector <T>> {

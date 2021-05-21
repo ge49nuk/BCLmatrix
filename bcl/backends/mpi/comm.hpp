@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <vector>
+#include <omp.h>
 
 #include <type_traits>
 
@@ -45,6 +46,7 @@ inline void read(const GlobalPtr <T> &src, T *dst, const size_t size) {
   int error_code = MPI_Rget(dst, size*sizeof(T), MPI_CHAR,
                             src.rank, src.ptr, size*sizeof(T), MPI_CHAR,
                             BCL::win, &request);
+  
   BCL_DEBUG(
     if (error_code != MPI_SUCCESS) {
       throw debug_error("BCL read(): MPI_Rget returned error code " + std::to_string(error_code));

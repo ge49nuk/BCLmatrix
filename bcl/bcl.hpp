@@ -15,15 +15,20 @@
   #include <bcl/backends/mpi/backend.hpp>
 #endif
 
+#define MSIZE 150
+
 #include <bcl/core/comm.hpp>
 #include <bcl/core/teams.hpp>
 #include <bcl/core/util.hpp>
 
+
 struct task
 {
     int matrixSize;
-    double *matrix;
-    double *matrix2;
+    double matrix[MSIZE*MSIZE];
+    double matrix2[MSIZE*MSIZE];
+    double result[MSIZE*MSIZE];
+    unsigned int taskId;
 };
 
 namespace BCL {

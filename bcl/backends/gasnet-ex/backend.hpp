@@ -48,7 +48,7 @@ inline void* gasnet_resolve_address(const GlobalPtr<T> ptr) {
 }
 
 inline void init(uint64_t shared_segment_size = 256, bool thread_safe = false) {
-  BCL::shared_segment_size = 16*1024*1024*shared_segment_size;
+  BCL::shared_segment_size = 1024*1024*shared_segment_size;
 
   gex_Client_Init(&client, &ep, &tm, clientName, NULL, NULL, 0);
 
