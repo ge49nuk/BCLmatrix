@@ -1,0 +1,14 @@
+Executing code with 2 ranks and 16 threads/rank and Msize: 50
+0.020967
+Executing code with 2 ranks and 16 threads/rank and Msize: 100
+0.128508
+Executing code with 2 ranks and 16 threads/rank and Msize: 150
+0.440929
+Executing code with 2 ranks and 16 threads/rank and Msize: 200
+1.015835
+Executing code with 2 ranks and 16 threads/rank and Msize: 250
+1.918011
+Executing code with 2 ranks and 16 threads/rank and Msize: 300
+3.262170
+Executing code with 2 ranks and 16 threads/rank and Msize: 350
+5.335385

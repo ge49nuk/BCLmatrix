@@ -25,7 +25,9 @@ else ifeq ($(BACKEND),GASNET_EX)
   BCL_RUN=mpirun -n 4
 else ifeq ($(BACKEND), UPCXX)
   BACKEND=UPCXX
-  CXX = /dss/dssfs02/lwp-dss-0001/pr63so/pr63so-dss-0000/ge49nuk2/upc/bin/upcxx -O3
+  CXX = mpicxx
+  BCLFLAGS = -I$(BCLROOT)
+
   BCL_RUN=mpirun -n 4
 else
   BCL_RUN=mpirun -n 4
@@ -33,7 +35,7 @@ else
   BCLFLAGS = -I$(BCLROOT)
   CXX=mpicxx -cxx=g++
 endif
-CXXFLAGS = -fopenmp -std=gnu++17 $(BCLFLAGS)
+CXXFLAGS = -fopenmp -std=gnu++17 -pg $(BCLFLAGS)
 
 SOURCES += $(wildcard *.cpp)
 TARGETS := $(patsubst %.cpp, %, $(SOURCES))

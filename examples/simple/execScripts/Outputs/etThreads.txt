@@ -1,0 +1,2 @@
+Executing code with: RANKS:2  THREADS:2  MSIZE:150  STEALP:0.500000  STEALING:1
+[0]Steal Time: 0.031071%  Multiply time: 99.922434%  Response time: 0.005095%

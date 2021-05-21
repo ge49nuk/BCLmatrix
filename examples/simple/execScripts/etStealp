@@ -1,0 +1,12 @@
+export OMP_NUM_THREADS=2
+export STEALP=0.1
+cd ..
+mpirun -n 2 ./taskStealing 150 2400 1 > execScripts/Outputs/etStealp.txt
+export STEALP=0.3
+mpirun -n 2 ./taskStealing 150 2400 1 >> execScripts/Outputs/etStealp.txt
+export STEALP=0.5
+mpirun -n 2 ./taskStealing 150 2400 1 >> execScripts/Outputs/etStealp.txt
+export STEALP=0.7
+mpirun -n 2 ./taskStealing 150 2400 1 >> execScripts/Outputs/etStealp.txt
+export STEALP=0.9
+mpirun -n 2 ./taskStealing 150 2400 1 >> execScripts/Outputs/etStealp.txt

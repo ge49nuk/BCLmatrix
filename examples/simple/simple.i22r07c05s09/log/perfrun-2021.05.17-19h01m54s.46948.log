@@ -1,0 +1,84 @@
+12 [1447145664] INFO perfrun.launcher <> - Launcher main begin
+15 [1447145664] INFO perfrun.launcher <> - MessageCatalogInit finished
+15 [1447145664] INFO perfrun.launcher <> - Launcher instance created
+15 [1447145664] INFO perfrun.launcher <> - argc = 6; cmdline = /dss/dsshome1/lrz/sys/intel/oneapi/2021.1/vtune/2021.1.1/bin32/amplxe-runss -dump-vdso -r /dss/dssfs02/lwp-dss-0001/pr63so/pr63so-dss-0000/ge49nuk2/bcl/examples/simple/simple.i22r07c05s09 --tmp-dir /gpfs/scratch/pr63so/ge49nuk2/ge49nuk2/amplxe-tmp-ge49nuk2 
+34 [1447145664] INFO perfrun.launcher <> - plugin remoteplug has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin vdso has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+34 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - plugin  has been added successfully
+40 [1447145664] INFO perfrun.launcher <> - the option was added --interval: Specify an interval of data collection (for example, sampling) in milliseconds.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --follow-child: Profile process with or without children.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --gelding: BADMSG: perfrun1.launcher.plugin_manager::gelding
+41 [1447145664] INFO perfrun.launcher <> - the option was added --time-source: Specify time source for measurement. Possible values: sys - wall clock time; tsc - time stamp counter; ext - time from an external source; auto - auto select accurate time source.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --stack: Enable or disable collection of stacks.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --stack-stitching: Enable or disable the stack stitching algorithm for Intel TBB-based applications.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --type: Specify type of data to be collected. For example, --type cpu:counters,waiting:nostack,io.
+41 [1447145664] INFO perfrun.launcher <> - the option was added --mrte-mode: Specify Java/.NET/other managed runtime collection mode. Possible values: native - collect information only for native code; managed - collect information only for managed code; mixed - collect information for both managed and native code; auto - choose the mode based on binary type.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --mrte-mode-list: List supported Java/.NET/other managed runtime collection modes.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --mrte-type: Specify which managed runtimes to collect. Possible values: java - collect information for Java; dotnet - collect information for .NET; python - collect information for CPython. You can specify several values separated by comma.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --mrte-type-list: List supported Java/.NET/other managed runtime types.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --trace-strategy: Specify how to profile a process tree. <string> can be "<process>:trace:notrace" - profile the process but do not profile its children. Shorthand parameters: t - trace, nt - notrace. For example, "vtunedemo.exe:t:t".
+46 [1447145664] INFO perfrun.launcher <> - the option was added --collector: BADMSG: perfrun1.launcher.plugin_manager::collector
+46 [1447145664] INFO perfrun.launcher <> - the option was added --system-wide: Enable system-wide profiling. This mode may require additional permissions.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --kvm-guest: Enable KVM guest OS profiling.
+46 [1447145664] INFO perfrun.launcher <> - the option was added --kvm-guest-kallsyms: Specify a local path to the /proc/kallsyms file copied from the guest OS for proper symbol resolution.
+47 [1447145664] INFO perfrun.launcher <> - the option was added --kvm-guest-modules: Specify a local path to the /proc/modules file copied from the guest OS for proper symbol resolution.
+47 [1447145664] INFO perfrun.launcher <> - the option was added --dump-vdso: Dump [vdso] to result directory
+47 [1447145664] INFO perfrun.launcher <> - the option was added --system-collector-config: Specify subcollectors. Possible values: all, vdso.
+47 [1447145664] INFO perfrun.launcher <> - create msngr2::ICliToolContext
+47 [1447145664] INFO perfrun.launcher <> - create file finder object
+55 [1477708608] INFO perfrun.launcher <> - plugin [remoteplug] was disabled because it doesn't support the given collection type.
+55 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+55 [1477708608] INFO perfrun.vdso <> - dumping [vdso] pseudomodule
+56 [1477708608] WARN perfrun.vdso <> - could not archive [vdso], return code 6, at file: vcs/perfrun1/plugins/vdso/src/vdso_collector.cpp:275
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1477708608] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+57 [1447145664] INFO perfrun.launcher <> - Application exit code: 0
+57 [1447145664] INFO perfrun.launcher <> - Exit code: 0

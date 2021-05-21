@@ -1,0 +1,39 @@
+Executing code with: RANKS:2  THREADS:16  MSIZE:50  STEALP:0.500000  STEALING:1
+0.554876
+Executing code with: RANKS:2  THREADS:16  MSIZE:50  STEALP:0.500000  STEALING:0
+0.481240
+Speedup: 0.867293
+Executing code with: RANKS:2  THREADS:16  MSIZE:100  STEALP:0.500000  STEALING:1
+0.958163
+Executing code with: RANKS:2  THREADS:16  MSIZE:100  STEALP:0.500000  STEALING:0
+1.098829
+Speedup: 1.146807
+Executing code with: RANKS:2  THREADS:16  MSIZE:150  STEALP:0.500000  STEALING:1
+2.824151
+Executing code with: RANKS:2  THREADS:16  MSIZE:150  STEALP:0.500000  STEALING:0
+3.280464
+Speedup: 1.161575
+Executing code with: RANKS:2  THREADS:16  MSIZE:200  STEALP:0.500000  STEALING:1
+6.413163
+Executing code with: RANKS:2  THREADS:16  MSIZE:200  STEALP:0.500000  STEALING:0
+7.993985
+Speedup: 1.246496
+Executing code with: RANKS:2  THREADS:16  MSIZE:250  STEALP:0.500000  STEALING:1
+12.417441
+Executing code with: RANKS:2  THREADS:16  MSIZE:250  STEALP:0.500000  STEALING:0
+14.956438
+Speedup: 1.204470
+Executing code with: RANKS:2  THREADS:16  MSIZE:300  STEALP:0.500000  STEALING:1
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 2830 RUNNING AT i22r07c05s02
+=   KILLED BY SIGNAL: 6 (Aborted)
+===================================================================================
+Executing code with: RANKS:2  THREADS:16  MSIZE:350  STEALP:0.500000  STEALING:1
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 3019 RUNNING AT i22r07c05s02
+=   KILLED BY SIGNAL: 6 (Aborted)
+===================================================================================

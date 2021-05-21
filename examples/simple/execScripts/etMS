@@ -1,0 +1,9 @@
+cd ..
+export OMP_NUM_THREADS=16
+mpirun -n 2 ./taskStealing 50 2400 1 > execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 100 2400 1 >> execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 150 2400 1 >> execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 200 2400 1 >> execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 250 2400 1 >> execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 300 2400 1 >> execScripts/Outputs/etMS.txt
+mpirun -n 2 ./taskStealing 350 2400 1 >> execScripts/Outputs/etMS.txt
