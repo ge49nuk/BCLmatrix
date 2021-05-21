@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <rdmgr>
+  <timestamp type="u64_t">1621600608</timestamp>
+  <hostname type="string">i22r07c05s05</hostname>
+  <os type="string">linux</os>
+  <product type="string">Intel® oneAPI VTune™ Profiler 2021.1.1 Gold</product>
+  <buildNumber type="s32_t">613804</buildNumber>
+  <logicalCPUCount type="s32_t">56</logicalCPUCount>
+  <physicalCoreCount type="s32_t">28</physicalCoreCount>
+  <processorPackageCount type="s32_t">2</processorPackageCount>
+  <CPUFrequency type="s64_t">2599000000</CPUFrequency>
+  <CPUFamily type="s32_t">6</CPUFamily>
+  <CPUModel type="s32_t">63</CPUModel>
+  <CPUStepping type="s32_t">2</CPUStepping>
+  <CPUBrandName type="string">Intel(R) Xeon(R) CPU E5-2697 v3 @ 2.60GHz</CPUBrandName>
+  <isa type="string">avx2</isa>
+  <mpirank type="s32_t">1</mpirank>
+  <collectionTimeBegin type="u64_t">1621600608</collectionTimeBegin>
+  <collectionTimeEnd type="u64_t">1621600609</collectionTimeEnd>
+  <variables>
+   <at type="string">hs</at>
+   <mpirank type="string">1</mpirank>
+  </variables>
+ </rdmgr>
+</root>
