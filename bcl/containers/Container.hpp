@@ -124,6 +124,9 @@ namespace BCL {
           ptr.ptr.get()[i] = task.matrix[i];
         }
       }
+      // free(task.matrix);
+      // free(task.matrix2);
+      // free(task.result);
       // printf("[%ld]Freed %d\n", BCL::rank(), task.matrixSize*task.matrixSize*2);
       
       // alloced-=2;
@@ -139,6 +142,9 @@ namespace BCL {
       size >>= 32;
       t.matrixSize = size;
       t.taskId = (unsigned long)matrices[ptr.N-1] % (size << 32);
+      // t.matrix = (double*)malloc(t.matrixSize*t.matrixSize*sizeof(double));
+      // t.matrix2 = (double*)malloc(t.matrixSize*t.matrixSize*sizeof(double));
+      // t.result = (double*)malloc(t.matrixSize*t.matrixSize*sizeof(double));
       // printf("[%ld]Alloced %d\n", BCL::rank(), t.matrixSize*t.matrixSize*2);
       
       for(int i = 0; i<t.matrixSize*t.matrixSize; i++){

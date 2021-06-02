@@ -9,10 +9,9 @@
 #include <bitset>
 #include <random>
 
-bool verifyResults = false,
-     ShowRuntimeDist = true;
 
-double stealPerc, stealTime = 0, multiplyTime = 0, responseTime = 0;
+double stealPerc;
+bool verifyResults = false;
 
 void multiply(double *matrix, double *matrix2, double *result);
 void initialize_matrix_rnd(double *mat);
@@ -44,8 +43,19 @@ double execute(int tasks, int taskStealing)
     }
     taskPointerArray[BCL::rank()][0].put(BCL::alloc<task>(tasks));
 
+    BCL::barrier();
+    vector<BCL::GlobalPtr<task>> taskPtrs;
+    for (size_t rank = 0; rank < BCL::nprocs(); rank++)
+    {
+        taskPtrs.push_back(taskPointerArray[rank][0].get());
+    }
+
     //create and save tasks
-    int nextId = 0;
+    
+#pragma omp parallel
+{
+    int nextId = omp_get_thread_num();
+#pragma omp for
     for (int i = 0; i < tasks; i++)
     {
         task t;
@@ -58,25 +68,20 @@ double execute(int tasks, int taskStealing)
         initialize_matrix_rnd(t.matrix);
         initialize_matrix_rnd(t.matrix2);
 
-        BCL::memcpy(taskPointerArray[BCL::rank()][0].get() + nextId, &t, sizeof(task));
+        BCL::memcpy(taskPtrs[BCL::rank()] + nextId, &t, sizeof(task));
         queues[BCL::rank()].push(t.taskId, BCL::CircularQueueAL::push);
 
-        nextId++;
+        nextId+=omp_get_num_threads();
     }
+}
+    
 
     BCL::barrier();
-    vector<BCL::GlobalPtr<task>> taskPtrs;
-    for (size_t rank = 0; rank < BCL::nprocs(); rank++)
-    {
-        taskPtrs.push_back(taskPointerArray[rank][0].get());
-    }
-
     //solve tasks and save the result at the origin rank
     fTimeStart = curtime();
 
     while (true)
     {
-        double startMult = curtime();
 
 #pragma omp parallel for
         for (int i = 0; i < queues[BCL::rank()].size(); i++)
@@ -95,24 +100,18 @@ double execute(int tasks, int taskStealing)
                 BCL::memcpy(&t, taskPtrs[ownerRank] + taskIndex, sizeof(task));
 
                 multiply(t.matrix, t.matrix2, t.result);
+                // printf("%lf\n", t.matrix[0]);
 
                 int offSet = 2 * MSIZE * MSIZE * sizeof(double) + sizeof(int);
                 BCL::memcpy(taskPtrs[ownerRank] + taskIndex, (&t), sizeof(task));
             }
         }
-        multiplyTime += curtime() - startMult;
 
         if (queues[BCL::rank()].size() == 0 && (!taskStealing || !steal(&queues)))
         {
             break;
         }
     }
-
-    elapsed = curtime() - fTimeStart;
-    if (ShowRuntimeDist)
-        printf("[%ld]Steal Time: %lf%%  Multiply time: %lf%%  Response time: %lf%%\n",
-               BCL::rank(), stealTime / elapsed * 100, multiplyTime / elapsed * 100, responseTime / elapsed * 100);
-
     // int flag;
 
     // printf("%d\n",MPI_Iprobe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &flag, MPI_STATUS_IGNORE));
@@ -196,25 +195,22 @@ bool steal(std::vector<BCL::CircularQueue<int>> *queues)
     {
 
         //measuring the time until the first response from foreign rank
-        double start = curtime();
         long size = (*queues)[*it].size();
-        responseTime += curtime() - start;
 
-        int minAmount = omp_get_max_threads() - 1;
         if (size > 0)
         {
             //steals half the tasks
             int j = 0;
-            while (j < (*queues)[*it].size() * stealPerc)
+            while (j < size * stealPerc)
             {
                 int tId;
 
-                start = curtime();
                 if ((*queues)[*it].pop(tId))
                 {
-                    stealTime += curtime() - start;
                     (*queues)[BCL::rank()].push(tId);
                 }
+                else
+                    break;
 
                 j++;
             }

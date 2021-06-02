@@ -1,0 +1,16 @@
+-r
+/dss/dssfs02/lwp-dss-0001/pr63so/pr63so-dss-0000/ge49nuk2/bcl/examples/simple/2N.i22r07c05s05
+--stack-stitching
+--data-limit-mb=500
+--disk-space-limit=0
+--mrte-type=java,python
+--itt-config=frame
+--stackwalk=offline
+--mrte-mode=auto
+--type=cpu:counters:nostack
+--type=cpu:stack
+--interval=10
+--
+./taskStealing
+250
+1
