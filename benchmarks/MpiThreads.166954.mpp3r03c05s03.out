@@ -1,0 +1,11 @@
+Unexpected KNL MCDRAM cache size 271781888
+Unexpected KNL MCDRAM cache size 271781888
+srun: got SIGCONT
+slurmstepd: error: *** STEP 166954.0 ON mpp3r03c05s03 CANCELLED AT 2021-06-04T12:10:14 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 166954 ON mpp3r03c05s03 CANCELLED AT 2021-06-04T12:10:14 ***
+[mpiexec@mpp3r03c05s03] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:362): write error (Bad file descriptor)
+srun: forcing job termination
+srun: error: mpp3r03c05s03: task 0: Terminated
+[mpiexec@mpp3r03c05s03] wait_proxies_to_terminate (../../../../../src/pm/i_hydra/mpiexec/intel/i_mpiexec.c:528): downstream from host mpp3r03c05s03 exited with status 143
+[mpiexec@mpp3r03c05s03] main (../../../../../src/pm/i_hydra/mpiexec/mpiexec.c:2084): assert (exitcodes != NULL) failed

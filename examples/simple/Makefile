@@ -17,7 +17,8 @@ ifeq ($(BACKEND),SHMEM)
 else ifeq ($(BACKEND),GASNET_EX)
   BACKEND=GASNET_EX
   # XXX: Allow selection of conduit.
-  include /dss/dsshome1/lxc0B/ge49nuk2/spack/opt/linux-sles15-haswell/gasnet/2019.3.0-gcc-8.4.0-j75dwrr/include/mpi-conduit/mpi-par.mak
+  #include /dss/dsshome1/lxc0B/ge49nuk2/spack/opt/linux-sles15-haswell/gasnet/2019.3.0-gcc-8.4.0-j75dwrr/include/smp-conduit/smp-par.mak
+  include /dss/dssfs02/lwp-dss-0001/pr63so/pr63so-dss-0000/ge49nuk2/gasnetInstall/include/ibv-conduit/ibv-par.mak
 
   BCLFLAGS = $(GASNET_CXXCPPFLAGS) $(GASNET_CXXFLAGS) $(GASNET_LDFLAGS) $(GASNET_LIBS) -DGASNET_EX -I$(BCLROOT)
   CXX = mpicxx -cxx=g++

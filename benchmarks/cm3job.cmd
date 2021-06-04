@@ -5,13 +5,13 @@
 #SBATCH --clusters=inter
 #SBATCH --partition=mpp3_inter
 #SBATCH --get-user-env
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
 #SBATCH --mail-type=end
 #SBATCH --mail-user=nikolan00@gmail.com
 #SBATCH --export=NONE
 #SBATCH --time=02:00:00
 module load slurm_setup
-module load intel/19.0.5
-module load intel-mpi/2019.8.254
+module load intel/19.0
+module load mpi.intel/2019
 ./etThreads
