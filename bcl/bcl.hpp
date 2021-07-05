@@ -15,7 +15,7 @@
   #include <bcl/backends/mpi/backend.hpp>
 #endif
 
-#define MSIZE 150
+#define MSIZE 50
 
 #include <bcl/core/comm.hpp>
 #include <bcl/core/teams.hpp>
@@ -27,6 +27,20 @@ struct task
     int matrixSize;
     double matrix[MSIZE*MSIZE];
     double matrix2[MSIZE*MSIZE];
+    double result[MSIZE*MSIZE];
+    unsigned int taskId;
+};
+
+struct taskNoRes
+{
+    int matrixSize;
+    double matrix[MSIZE*MSIZE];
+    double matrix2[MSIZE*MSIZE];
+    unsigned int taskId;
+};
+
+struct taskRes
+{
     double result[MSIZE*MSIZE];
     unsigned int taskId;
 };
