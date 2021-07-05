@@ -1,0 +1,77 @@
+Executing code with: RANKS:2  THREADS:1  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 29.916880
+Local Runtime: 44.630427
+Speedup: 1.491814
+Tasks migrated: 792
+Executing code with: RANKS:2  THREADS:1  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 30.020271
+Local Runtime: 44.829226
+Speedup: 1.493299
+Tasks migrated: 793
+Executing code with: RANKS:2  THREADS:1  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 29.862160
+Local Runtime: 44.663603
+Speedup: 1.495659
+Tasks migrated: 794
+
+Executing code with: RANKS:2  THREADS:2  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 13.716874
+Local Runtime: 22.788930
+Speedup: 1.661379
+Tasks migrated: 954
+Executing code with: RANKS:2  THREADS:2  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 13.711978
+Local Runtime: 22.747851
+Speedup: 1.658977
+Tasks migrated: 948
+Executing code with: RANKS:2  THREADS:2  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 13.787311
+Local Runtime: 22.633288
+Speedup: 1.641603
+Tasks migrated: 943
+
+Executing code with: RANKS:2  THREADS:4  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 6.380567
+Local Runtime: 11.268102
+Speedup: 1.766003
+Tasks migrated: 1046
+Executing code with: RANKS:2  THREADS:4  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 6.441453
+Local Runtime: 11.324161
+Speedup: 1.758014
+Tasks migrated: 1038
+Executing code with: RANKS:2  THREADS:4  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 6.383207
+Local Runtime: 11.305943
+Speedup: 1.771201
+Tasks migrated: 1049
+
+Executing code with: RANKS:2  THREADS:8  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 3.130212
+Local Runtime: 5.643784
+Speedup: 1.803004
+Tasks migrated: 1077
+Executing code with: RANKS:2  THREADS:8  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 3.155521
+Local Runtime: 5.641345
+Speedup: 1.787770
+Tasks migrated: 1063
+Executing code with: RANKS:2  THREADS:8  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 3.166562
+Local Runtime: 5.642287
+Speedup: 1.781834
+Tasks migrated: 1060
+Executing code with: RANKS:2  THREADS:16  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+Executing code with: RANKS:2  THREADS:32  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort

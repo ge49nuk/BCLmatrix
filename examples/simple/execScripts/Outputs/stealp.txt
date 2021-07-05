@@ -1,0 +1,27 @@
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:0.100000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.608917
+Local Runtime: 2.164444
+Speedup: 1.345280
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:0.200000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.573130
+Local Runtime: 2.149733
+Speedup: 1.366533
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:0.300000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.567098
+Local Runtime: 2.162149
+Speedup: 1.379715
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:0.400000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.564397
+Local Runtime: 2.204851
+Speedup: 1.409394
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:0.500000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.570292
+Local Runtime: 2.154561
+Speedup: 1.372076
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
+Inter Runtime: 1.972213
+Local Runtime: 2.171378
+Speedup: 1.100985
+[mpiexec@rome1] Sending Ctrl-C to processes as requested
+[mpiexec@rome1] Press Ctrl-C again to force abort
+Executing code with: RANKS:2  THREADS:22  MSIZE:150  STEALP:-1.000000  STEALING:2  ITERATIONS:5
